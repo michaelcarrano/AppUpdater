@@ -26,9 +26,9 @@ public class Version implements Comparable<Version> {
         int length = Math.max(thisParts.length, thatParts.length);
         for (int i = 0; i < length; i++) {
             int thisPart = i < thisParts.length ?
-                    Integer.parseInt(thisParts[i]) : 0;
+                    Integer.parseInt(thisParts[i].replaceAll("[^0-9?!\\.]","")) : 0;
             int thatPart = i < thatParts.length ?
-                    Integer.parseInt(thatParts[i]) : 0;
+                    Integer.parseInt(thatParts[i].replaceAll("[^0-9?!\\.]","")) : 0;
             if (thisPart < thatPart)
                 return -1;
             if (thisPart > thatPart)
