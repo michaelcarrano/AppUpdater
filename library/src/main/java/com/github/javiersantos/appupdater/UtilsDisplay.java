@@ -4,47 +4,55 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.RingtoneManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
 
 import java.net.URL;
 
 class UtilsDisplay {
 
-    static void showUpdateAvailableDialog(final Context context, String title, String content, String btnNegative, String btnPositive, String btnNeutral, final UpdateFrom updateFrom, final URL apk) {
+    static void showUpdateAvailableDialog(final Context context, String title, String content, String btnNegative, String btnPositive, String btnNeutral, Boolean indefinite, final UpdateFrom updateFrom, final URL apk) {
         final LibraryPreferences libraryPreferences = new LibraryPreferences(context);
 
-        new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .positiveText(btnPositive)
-                .negativeText(btnNegative)
-                .neutralText(btnNeutral)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        UtilsLibrary.goToUpdate(context, updateFrom, apk);
-                    }
-                })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        libraryPreferences.setAppUpdaterShow(false);
-                    }
-                }).show();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(title);
+        dialog.setMessage(content);
+        dialog.setPositiveButton(btnPositive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UtilsLibrary.goToUpdate(context, updateFrom, apk);
+            }
+        });
+
+        if (!indefinite) {
+            dialog.setNeutralButton(btnNeutral, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    libraryPreferences.setAppUpdaterShow(false);
+                }
+            });
+            dialog.setNegativeButton(btnNegative, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+        dialog.setCancelable(!indefinite);
+        dialog.show();
     }
 
     static void showUpdateNotAvailableDialog(final Context context, String title, String content) {
-        new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .positiveText(context.getResources().getString(android.R.string.ok))
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(content)
+                .setPositiveButton(context.getResources().getString(android.R.string.ok), null)
                 .show();
     }
 
