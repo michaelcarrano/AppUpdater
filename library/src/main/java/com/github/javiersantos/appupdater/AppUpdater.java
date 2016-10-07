@@ -1,7 +1,6 @@
 package com.github.javiersantos.appupdater;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +24,6 @@ public class AppUpdater {
     private Boolean showAppUpdated;
     private String titleUpdate, descriptionUpdate, btnDismiss, btnUpdate, btnDisable; // Update available
     private String titleNoUpdate, descriptionNoUpdate; // Update not available
-    private int iconResId;
 
     public AppUpdater(Context context) {
         this.context = context;
@@ -35,7 +33,6 @@ public class AppUpdater {
         this.duration = Duration.NORMAL;
         this.showEvery = 1;
         this.showAppUpdated = false;
-        this.iconResId = R.drawable.ic_stat_name;
 
         // Dialog
         this.titleUpdate = context.getResources().getString(R.string.appupdater_update_available);
@@ -194,17 +191,6 @@ public class AppUpdater {
     }
 
     /**
-     * Sets the resource identifier for the small notification icon
-     *
-     * @param iconRes The id of the drawable item
-     * @return this
-     */
-    public AppUpdater setIcon(@DrawableRes int iconRes) {
-        this.iconResId = iconRes;
-        return this;
-    }
-
-    /**
      * Execute AppUpdater in background.
      *
      * @return this
@@ -232,9 +218,6 @@ public class AppUpdater {
                             case SNACKBAR:
                                 UtilsDisplay.showUpdateAvailableSnackbar(context, getDescriptionUpdate(context, update, Display.SNACKBAR), UtilsLibrary.getDurationEnumToBoolean(duration), updateFrom, update.getUrlToDownload());
                                 break;
-                            case NOTIFICATION:
-                                UtilsDisplay.showUpdateAvailableNotification(context, context.getResources().getString(R.string.appupdater_update_available), getDescriptionUpdate(context, update, Display.NOTIFICATION), updateFrom, update.getUrlToDownload(), iconResId);
-                                break;
                         }
                     }
                     libraryPreferences.setSuccessfulChecks(successfulChecks + 1);
@@ -245,9 +228,6 @@ public class AppUpdater {
                             break;
                         case SNACKBAR:
                             UtilsDisplay.showUpdateNotAvailableSnackbar(context, getDescriptionNoUpdate(context), UtilsLibrary.getDurationEnumToBoolean(duration));
-                            break;
-                        case NOTIFICATION:
-                            UtilsDisplay.showUpdateNotAvailableNotification(context, context.getResources().getString(R.string.appupdater_update_not_available), getDescriptionNoUpdate(context), iconResId);
                             break;
                     }
                 }
@@ -285,9 +265,6 @@ public class AppUpdater {
 
                 case SNACKBAR:
                     return String.format(context.getResources().getString(R.string.appupdater_update_available_description_snackbar), update.getLatestVersion());
-
-                case NOTIFICATION:
-                    return String.format(context.getResources().getString(R.string.appupdater_update_available_description_notification), update.getLatestVersion(), UtilsLibrary.getAppName(context));
 
             }
         }

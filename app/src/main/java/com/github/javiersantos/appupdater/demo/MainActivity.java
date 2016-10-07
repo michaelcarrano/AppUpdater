@@ -36,11 +36,9 @@ public class MainActivity extends AppCompatActivity {
         CardView dialogUpdateChangelog = (CardView) findViewById(R.id.dialog_update_changelog);
         CardView dialogUpdate = (CardView) findViewById(R.id.dialog_update);
         CardView snackbarUpdate = (CardView) findViewById(R.id.snackbar_update);
-        CardView notificationUpdate = (CardView) findViewById(R.id.notification_update);
 
         CardView dialogNoUpdate = (CardView) findViewById(R.id.dialog_no_update);
         CardView snackbarNoUpdate = (CardView) findViewById(R.id.snackbar_no_update);
-        CardView notificationNoUpdate = (CardView) findViewById(R.id.notification_no_update);
 
         fab.setImageDrawable(new IconicsDrawable(this).icon(MaterialDesignIconic.Icon.gmi_github).color(Color.WHITE).sizeDp(24));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,20 +90,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notificationUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        //.setUpdateFrom(UpdateFrom.GITHUB)
-                        //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
-                        .setUpdateFrom(UpdateFrom.XML)
-                        .setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update.xml")
-                        .setDisplay(Display.NOTIFICATION)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
-
         dialogNoUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,16 +112,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notificationNoUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AppUpdater(context)
-                        .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                        .setDisplay(Display.NOTIFICATION)
-                        .showAppUpdated(true)
-                        .start();
-            }
-        });
     }
 
     @Override
